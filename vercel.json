@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/onboarding", "destination": "/onboarding.html" }
+    { "source": "/onboarding", "destination": "/onboarding.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
