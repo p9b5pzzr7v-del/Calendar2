@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEEV CALENDAR — 설정</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f4f8fe;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .star-row {
+    font-size: 11px;
+    color: #bdd0e8;
+    letter-spacing: 6px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3a5f8a;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: #a0b8d4;
+    letter-spacing: 0.04em;
+  }
+
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: #bdd0e8;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .step.active { color: #5b8ec2; }
+  .step.done { color: #9bbfdd; }
+
+  .step-num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #e8f0fa;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: #bdd0e8;
+  }
+  .step.active .step-num { background: #5b8ec2; color: #fff; }
+  .step.done .step-num { background: #c8dcf0; color: #5b8ec2; }
+
+  .step-divider { color: #d0dff0; font-size: 10px; }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #e0ecf8;
+    padding: 28px 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3a5f8a;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 11.5px;
+    color: #8aaac8;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .card-desc a {
+    color: #5b8ec2;
+    text-decoration: none;
+  }
+  .card-desc a:hover { text-decoration: underline; }
+
+  .field { margin-bottom: 14px; }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8aaac8;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #dde8f5;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    color: #3a5f8a;
+    background: #f8fbff;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #7aafdd;
+    background: #fff;
+  }
+
+  input::placeholder { color: #c0d4e8; }
+
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+  }
+
+  .toggle-btn {
+    font-size: 11px;
+    color: #a0b8d4;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 0;
+    font-family: 'Nunito', sans-serif;
+  }
+  .toggle-btn:hover { color: #5b8ec2; }
+
+  .props-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .hint {
+    font-size: 10.5px;
+    color: #b8cfe4;
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: #5b8ec2;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-primary:hover { background: #4a7db5; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 11px;
+    background: none;
+    color: #8aaac8;
+    border: 1px solid #dde8f5;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+  }
+  .btn-secondary:hover { background: #f4f8fe; }
+
+  .result-card {
+    background: #eef6ff;
+    border: 1px solid #c8dcf0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  .result-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #5b8ec2;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .env-list { list-style: none; }
+
+  .env-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    border: 1px solid #ddeef8;
+  }
+
+  .env-key {
+    font-size: 11px;
+    font-weight: 700;
+    color: #5b8ec2;
+    font-family: monospace;
+  }
+
+  .env-val {
+    font-size: 11px;
+    color: #3a5f8a;
+    font-family: monospace;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .copy-btn {
+    font-size: 10px;
+    color: #a0b8d4;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    padding: 3px 8px;
+    border-radius: 6px;
+    transition: background 0.1s;
+  }
+  .copy-btn:hover { background: #ddeef8; color: #5b8ec2; }
+  .copy-btn.copied { color: #5baa7a; }
+
+  .embed-box {
+    background: #fff;
+    border: 1px solid #ddeef8;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: #5b8ec2;
+    font-family: monospace;
+    word-break: break-all;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .embed-box:hover { background: #f4f8fe; }
+
+  .step-guide {
+    background: #fff8fc;
+    border: 1px solid #f0d8e8;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  .guide-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #c07090;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .guide-step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .guide-num {
+    width: 20px; height: 20px;
+    background: #fce8f0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #c07090;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .guide-text {
+    font-size: 11.5px;
+    color: #886678;
+    line-height: 1.6;
+  }
+
+  .guide-text a { color: #c07090; }
+
+  .success-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #eaf6f0;
+    color: #3a8a60;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .footer-note {
+    text-align: center;
+    font-size: 10.5px;
+    color: #c0d4e8;
+    margin-top: 10px;
+  }
+
+  .footer-note span { color: #e8b4c8; }
+
+  .error-text {
+    font-size: 11px;
+    color: #e8819a;
+    margin-top: 5px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="star-row">✦ ✦ ✦ ✦ ✦</div>
+    <div class="title">HEEV CALENDAR</div>
+    <div class="subtitle">노션 DB 연동 캘린더 위젯 설정</div>
+  </div>
+
+  <div class="steps" id="steps-bar">
+    <div class="step active" id="step-1">
+      <div class="step-num">1</div>API
+    </div>
+    <div class="step-divider">›</div>
+    <div class="step" id="step-2">
+      <div class="step-num">2</div>DB
+    </div>
+    <div class="step-divider">›</div>
+    <div class="step" id="step-3">
+      <div class="step-num">3</div>속성
+    </div>
+    <div class="step-divider">›</div>
+    <div class="step" id="step-4">
+      <div class="step-num">4</div>완료
+    </div>
+  </div>
+
+  <!-- SCREEN 1: API KEY -->
+  <div class="screen active" id="screen-1">
+    <div class="card">
+      <div class="card-title">✦ NOTION API KEY</div>
+      <div class="card-desc">
+        <a href="https://www.notion.so/my-integrations" target="_blank">notion.so/my-integrations</a>에서
+        인테그레이션을 만들고 Internal Integration Secret을 입력해 주세요.
+      </div>
+      <div class="field">
+        <label>NOTION_TOKEN</label>
+        <input type="password" id="input-token" placeholder="secret_xxxxxxxxxxxxxxxx" />
+        <div class="toggle-wrap">
+          <button class="toggle-btn" onclick="toggleVis('input-token', this)">표시하기</button>
+        </div>
+        <div class="error-text" id="err-token">API 키를 입력해 주세요</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goStep(2)">다음 →</button>
+  </div>
+
+  <!-- SCREEN 2: DB ID -->
+  <div class="screen" id="screen-2">
+    <div class="card">
+      <div class="card-title">✦ DATABASE ID</div>
+      <div class="card-desc">
+        노션 DB 페이지 URL에서 ID를 복사해 주세요.<br>
+        <code style="font-size:10.5px;color:#7a9cc4;">notion.so/워크스페이스/<b>여기가 DB ID</b>?v=...</code>
+      </div>
+      <div class="field">
+        <label>NOTION_DB_ID</label>
+        <input type="text" id="input-db" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+        <div class="hint">하이픈(-) 포함 또는 제외 모두 가능해요</div>
+        <div class="error-text" id="err-db">DB ID를 입력해 주세요</div>
+      </div>
+      <div class="card-desc" style="margin-bottom:0; margin-top: 12px; background:#f4f8fe; border-radius:10px; padding:10px 12px;">
+        💡 DB를 인테그레이션에 연결했는지 확인해 주세요 — DB 페이지 우상단 ··· → 연결 추가
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goStep(3)">다음 →</button>
+    <button class="btn-secondary" onclick="goStep(1)">← 이전</button>
+  </div>
+
+  <!-- SCREEN 3: PROPERTIES -->
+  <div class="screen" id="screen-3">
+    <div class="card">
+      <div class="card-title">✦ DB 속성 이름</div>
+      <div class="card-desc">
+        노션 DB의 실제 속성 이름을 그대로 입력해 주세요. 비워두면 기본값을 사용해요.
+      </div>
+      <div class="props-grid">
+        <div class="field">
+          <label>제목 속성</label>
+          <input type="text" id="prop-title" placeholder="브랜드/제품 명" />
+        </div>
+        <div class="field">
+          <label>시작 날짜</label>
+          <input type="text" id="prop-date" placeholder="시작 날짜" />
+        </div>
+        <div class="field">
+          <label>유형</label>
+          <input type="text" id="prop-type" placeholder="유형" />
+        </div>
+        <div class="field">
+          <label>상태</label>
+          <input type="text" id="prop-status" placeholder="상태" />
+        </div>
+      </div>
+      <div class="hint" style="margin-top:10px;">진행중 상태인 항목은 중요(핑크)로 표시돼요</div>
+    </div>
+    <button class="btn-primary" onclick="goStep(4)">설정 완료 ✦</button>
+    <button class="btn-secondary" onclick="goStep(2)">← 이전</button>
+  </div>
+
+  <!-- SCREEN 4: DONE -->
+  <div class="screen" id="screen-4">
+    <div class="card">
+      <div class="success-badge">✦ 설정 완료</div>
+      <div class="card-title" style="margin-bottom:14px;">Vercel 환경변수 설정</div>
+
+      <ul class="env-list" id="env-list"></ul>
+
+      <div class="hint" style="margin-top: 4px;">
+        Vercel → 프로젝트 → Settings → Environment Variables에 위 값들을 추가해 주세요.
+      </div>
+    </div>
+
+    <div class="step-guide" id="deploy-guide" style="display:block;">
+      <div class="guide-title">✦ 배포 가이드</div>
+      <div class="guide-step">
+        <div class="guide-num">1</div>
+        <div class="guide-text"><a href="https://vercel.com" target="_blank">vercel.com</a>에서 이 레포를 fork하거나 새로 배포해 주세요.</div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">2</div>
+        <div class="guide-text">Settings → Environment Variables에서 위 환경변수 3개를 추가해요.</div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">3</div>
+        <div class="guide-text">Redeploy 후 노션에서 /embed → 배포된 URL 붙여넣기.</div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">4</div>
+        <div class="guide-text">끝! 캘린더가 내 DB랑 연동돼요 🩵</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="copyAll()">환경변수 전체 복사</button>
+    <button class="btn-secondary" onclick="goStep(1)">처음으로</button>
+  </div>
+
+  <div class="footer-note">made with <span>🩵</span> by heev</div>
+</div>
+
+<script>
+  const state = {
+    token: '', db: '',
+    propTitle: '브랜드/제품 명',
+    propDate: '시작 날짜',
+    propType: '유형',
+    propStatus: '상태'
+  };
+
+  function toggleVis(id, btn) {
+    const el = document.getElementById(id);
+    if (el.type === 'password') {
+      el.type = 'text';
+      btn.textContent = '숨기기';
+    } else {
+      el.type = 'password';
+      btn.textContent = '표시하기';
+    }
+  }
+
+  function showErr(id, show) {
+    document.getElementById(id).style.display = show ? 'block' : 'none';
+  }
+
+  function goStep(n) {
+    if (n === 2) {
+      const val = document.getElementById('input-token').value.trim();
+      if (!val) { showErr('err-token', true); return; }
+      showErr('err-token', false);
+      state.token = val;
+    }
+    if (n === 3) {
+      const val = document.getElementById('input-db').value.trim();
+      if (!val) { showErr('err-db', true); return; }
+      showErr('err-db', false);
+      state.db = val.replace(/-/g, '');
+    }
+    if (n === 4) {
+      state.propTitle = document.getElementById('prop-title').value.trim() || '브랜드/제품 명';
+      state.propDate = document.getElementById('prop-date').value.trim() || '시작 날짜';
+      state.propType = document.getElementById('prop-type').value.trim() || '유형';
+      state.propStatus = document.getElementById('prop-status').value.trim() || '상태';
+      renderResult();
+    }
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + n).classList.add('active');
+
+    document.querySelectorAll('.step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (i + 1 < n) s.classList.add('done');
+      if (i + 1 === n) s.classList.add('active');
+    });
+  }
+
+  function renderResult() {
+    const envs = [
+      { key: 'NOTION_TOKEN', val: state.token },
+      { key: 'NOTION_DB_ID', val: state.db },
+      { key: 'PROP_TITLE', val: state.propTitle },
+      { key: 'PROP_DATE', val: state.propDate },
+      { key: 'PROP_TYPE', val: state.propType },
+      { key: 'PROP_STATUS', val: state.propStatus },
+    ];
+
+    const list = document.getElementById('env-list');
+    list.innerHTML = envs.map(e => `
+      <li class="env-item">
+        <span class="env-key">${e.key}</span>
+        <span class="env-val">${e.val.length > 20 ? e.val.substring(0,10)+'...'+e.val.slice(-6) : e.val}</span>
+        <button class="copy-btn" onclick="copyVal('${e.key}', '${e.val}', this)">복사</button>
+      </li>
+    `).join('');
+  }
+
+  function copyVal(key, val, btn) {
+    navigator.clipboard.writeText(val).then(() => {
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  function copyAll() {
+    const envs = [
+      `NOTION_TOKEN=${state.token}`,
+      `NOTION_DB_ID=${state.db}`,
+      `PROP_TITLE=${state.propTitle}`,
+      `PROP_DATE=${state.propDate}`,
+      `PROP_TYPE=${state.propType}`,
+      `PROP_STATUS=${state.propStatus}`,
+    ].join('\n');
+    navigator.clipboard.writeText(envs).then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ 복사됐어요';
+      setTimeout(() => { btn.textContent = '환경변수 전체 복사'; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
